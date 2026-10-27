@@ -8,7 +8,7 @@ metadata:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '8080'
     prometheus.io/path: '/actuator/prometheus'
-    update: {{HASHCODE}}
+    update: "{{HASHCODE}}"
   name: {{USER_NAME}}-{{SERVICE_NAME}}
   namespace: {{NAMESPACE}}
 spec:
@@ -25,13 +25,17 @@ spec:
       terminationGracePeriodSeconds: 20
       containers:
         - name: {{SERVICE_NAME}}
-          image: {{DOCKER_REGISTRY}}/{{PROJECT_NAME}}/{{USER_NAME}}-webserver:1.0.buildkit-pod
+          image: {{DOCKER_REGISTRY}}/{{PROJECT_NAME}}/{{USER_NAME}}-webserver:1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "local"
+            - name: DEVELOPER_OWNER_NAME
+              value: "sk064"
+            - name: DEVELOPER_TEAM_DETAIL
+              value: "class-2"
           # 준비(readiness)가 끝나기 전에는 Service가 트래픽을 보내지 않는다.
           readinessProbe:
             httpGet:
